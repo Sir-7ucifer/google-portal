@@ -23,6 +23,27 @@ The default portal is configured for a safe local test mode.
 
 Logging is written to a writable temp directory in root/logs/evillogs.log
 
+## Quick Pineapple fix
+
+If your Pineapple is logging repeated `open() "/www/connecttest.txt" failed` errors, run this on the device:
+
+```bash
+mkdir -p /www
+cat > /www/connecttest.txt <<'EOF'
+OK
+EOF
+
+cat > /www/generate_204 <<'EOF'
+OK
+EOF
+
+chmod 644 /www/connecttest.txt /www/generate_204
+nginx -t
+/etc/init.d/nginx reload 2>/dev/null || service nginx reload 2>/dev/null || kill -HUP $(pgrep nginx)
+```
+
+This satisfies the captive-portal checks that clients make while trying to determine whether they are behind a login page.
+
 ## Pineapple-side troubleshooting
 
 A common issue on the WiFi Pineapple is that client devices keep probing captive-portal URLs such as `/connecttest.txt`, `/generate_204`, and `/hotspot-detect.html`. If the Pineapple root is `/www` and those files are missing, nginx will log repeated errors like:
