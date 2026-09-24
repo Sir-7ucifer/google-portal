@@ -33,13 +33,4 @@ class MyPortal extends Portal
         parent::handleAuthorization();
     }
 
-    public function onSuccess()
-    {
-        parent::onSuccess();
-    }
-
-    public function showError()
-    {
-        parent::showError();
-    }
 }
